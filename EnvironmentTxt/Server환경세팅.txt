@@ -1,0 +1,47 @@
+EC2 세팅
+
+리눅스
+sudo chmod 400 awskey붙여넣기
+
+윈도우 // 원격 접속 (원격접속키와 마지막에 public ip주소)
+ssh -i 키파일붙여넣기 ubuntu@공개ip
+
+# python3 -> python   // python3 명령어를 python으로 사용할 수 있게 하는 명령어
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10
+
+# pip3 설치
+sudo apt-get update
+sudo apt-get install -y python3-pip
+
+# pip3 대신 pip 라고 입력하기 위한 명령어
+sudo update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
+
+# port forwarding  // 80포트(http)로 들어오는 요청을 5000포트로 넘겨주는 명령어
+sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 5000
+
+→ 80포트: HTTP 접속을 위한 기본포트
+→ 5000포트: flask 기본포트
+
+# pip 설치 명령어
+pip install 라이브러리|프레임워크
+
+# 파이썬 파일 실행
+python app.py
+
+## **nohup 설정하기**
+- 원격 접속을 종료하더라도 서버가 계속 돌아가게 하기 (서버 파일이 있는 경로로 이동)
+nohup python app.py &
+
+- 서버 종료하기 - 강제종료하는 방법 (ssh로 서버에 접속)
+ps -ef | grep 'python app.py' | awk '{print $2}' | xargs kill
+
+
+포트포워딩 개념
+- 지금은 5000포트에서 웹 서비스가 실행되고 있습니다. 그래서 매번 :5000 이라고 뒤에 붙여줘야 하죠. 뒤에 붙는 포트 번호를 없애려면 어떻게 해야할까요?
+- http 요청에서는 80포트가 기본이기 때문에, 굳이 :80을 붙이지 않아도 자동으로 연결이 됩니다.
+- 포트 번호를 입력하지 않아도 자동으로 접속되기 위해, 우리는 80포트로 오는 요청을 5000 포트로  전달하게 하는 포트포워딩(port forwarding) 을 사용하겠습니다.
+- 리눅스에서 기본으로 제공해주는  포트포워딩을 사용할 것입니다. 그림으로 보면 아래와 같습니다.
+
+
+-aws 인스턴스 서버 인바운드 보안 규칙에서 5000포트(flask) 80포트(http)를 열어준다.
+-개인 컴퓨터로 만든 서버라면 모뎀기기 설정으로 가서 포트를 열어주고 (cmd에 ipconfig 친 ip를 브라우저에 치면 보통 설정창이 나온다) 공유기를 쓴다면 공유기 접속 ip로 들어가서 포트포워딩(리눅스처럼 cli 창에서 하는법은 모르겠다 검색해봐야함)

@@ -1,0 +1,2 @@
+- 페이스북 og 태그 초기화 하기: [https://developers.facebook.com/tools/debug/](https://developers.facebook.com/tools/debug/)
+- 카카오톡 og 태그 초기화 하기: [https://developers.kakao.com/tool/clear/og](https://developers.kakao.com/tool/clear/og)
